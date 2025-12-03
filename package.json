@@ -1,0 +1,25 @@
+{
+  "name": "tyny",
+  "version": "3.0.0",
+  "main": "./index.js",
+  "author": "Sebastian Lenz",
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": [
+    "./core/components/components.js"
+  ],
+  "scripts": {
+    "build": "npm run clean && tsc",
+    "clean": "node ./clean.js",
+    "watch": "npm run clean && tsc -w"
+  },
+  "devDependencies": {
+    "tslib": "^2.8.1",
+    "typescript": "^5.9.3"
+  },
+  "prettier": {
+    "trailingComma": "es5",
+    "tabWidth": 2,
+    "singleQuote": true
+  }
+}
