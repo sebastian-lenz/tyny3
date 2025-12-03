@@ -1,0 +1,16 @@
+import { closest } from './closest';
+import { matches } from './matches';
+import { isDocument, toElement, toNode } from '../misc';
+import { isString } from '../../lang/string';
+export function within(element, selector) {
+    if (isString(selector)) {
+        return matches(element, selector) || !!closest(element, selector);
+    }
+    else if (element === selector) {
+        return true;
+    }
+    const scope = isDocument(selector)
+        ? selector.documentElement
+        : toElement(selector);
+    return scope ? scope.contains(toNode(element)) : false;
+}

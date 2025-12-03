@@ -1,0 +1,165 @@
+import { __rest } from "tslib";
+import { fastDom } from './components';
+import { find } from '../utils/dom/node';
+import { isEqual } from '../utils/lang/object/isEqual';
+import { isFunction } from '../utils/lang/function/isFunction';
+import { isString } from '../utils/lang/string';
+import { on } from '../utils/dom/event/on';
+export class Lifecycle {
+    constructor() {
+        this._eventListeners = null;
+        this._isConnected = false;
+        this._updatesTasks = null;
+        this._watchTask = null;
+        this._watchValues = null;
+    }
+    get isConnected() {
+        return this._isConnected;
+    }
+    addDestructor(callback, scope = 'disconnect') {
+        (this._destructors || (this._destructors = [])).push({
+            callback,
+            scope,
+        });
+    }
+    destroy() {
+        this._callDisconnected();
+        this._callDestroyed();
+    }
+    onConnected() { }
+    onDestroyed() { }
+    onDisconnected() { }
+    _callConnected() {
+        if (this._isConnected)
+            return;
+        this._isConnected = true;
+        this._bindEvents();
+        this.onConnected();
+    }
+    _callDestroyed() {
+        this._callDestructors('destroy');
+        this.onDestroyed();
+    }
+    _callDestructors(scope) {
+        var _a;
+        this._destructors = (_a = this._destructors) === null || _a === void 0 ? void 0 : _a.filter((destructor) => {
+            if (destructor.scope === scope) {
+                destructor.callback();
+                return false;
+            }
+            else {
+                return true;
+            }
+        });
+    }
+    _callDisconnected() {
+        if (!this._isConnected)
+            return;
+        this._isConnected = false;
+        this._callDestructors('disconnect');
+        this._unbindEvents();
+        this.onDisconnected();
+    }
+    _callUpdate(type) {
+        if (!type || type === 'update' || type === 'resize') {
+            this._watch();
+        }
+        const updates = Object.values(this._updates);
+        if (!updates.length) {
+            return;
+        }
+        const tasks = this._updatesTasks || (this._updatesTasks = []);
+        updates.forEach(({ events, handler, mode }, index) => {
+            if (tasks[index] || (type && !events.includes(type))) {
+                return;
+            }
+            tasks[index] = fastDom[mode](() => {
+                if (this.isConnected) {
+                    const result = this[handler].call(this, type);
+                    if (typeof result === 'function') {
+                        fastDom.writes.push(result.bind(this));
+                    }
+                }
+                tasks[index] = null;
+            });
+        });
+    }
+    _bindEvent(listeners, event) {
+        let { name, target, handler, selector, filter } = event, args = __rest(event, ["name", "target", "handler", "selector", "filter"]);
+        if (isFunction(target)) {
+            target = target.call(this, this);
+        }
+        else if (typeof target === 'string') {
+            target = find(target, this.el) || this.el;
+        }
+        else {
+            target = target || this.el;
+        }
+        if (Array.isArray(target)) {
+            return target.reduce((listeners, target) => this._bindEvent(listeners, Object.assign(Object.assign({}, event), { target })), listeners);
+        }
+        if (target && (!filter || filter.call(this, this))) {
+            listeners.push(on(target, name, this[handler], Object.assign(Object.assign({}, args), { selector: isFunction(selector)
+                    ? selector.call(this, this)
+                    : selector, scope: this })));
+        }
+        return listeners;
+    }
+    _bindEvents() {
+        if (this._eventListeners) {
+            this._unbindEvents();
+        }
+        const _events = Object.values(this._events);
+        this._eventListeners = _events
+            ? _events.reduce(this._bindEvent.bind(this), [])
+            : null;
+    }
+    _unbindEvents() {
+        const listeners = this._eventListeners;
+        this._eventListeners = null;
+        if (listeners) {
+            listeners.forEach((unbind) => unbind());
+        }
+    }
+    _watch() {
+        const properties = Object.values(this._properties);
+        if (this._watchTask || !properties.length) {
+            return;
+        }
+        this._watchTask = fastDom.read(() => {
+            if (this._isConnected) {
+                this._watchWorker(properties);
+            }
+            this._watchTask = null;
+        });
+    }
+    _watchWorker(properties) {
+        const isInitital = !this._watchValues;
+        const values = this._watchValues || (this._watchValues = {});
+        for (let index = 0; index < properties.length; index++) {
+            const { immediate, immutable, name, watch } = properties[index];
+            if (isInitital && immediate && !watch)
+                this[name];
+            if (immutable)
+                continue;
+            if (!watch) {
+                delete values[name];
+                continue;
+            }
+            const hasPrev = values.hasOwnProperty(name);
+            const prev = values[name];
+            delete values[name];
+            if ((isInitital && immediate) ||
+                (hasPrev && !isEqual(prev, this[name]))) {
+                isString(watch)
+                    ? this[watch](this[name], prev)
+                    : watch.call(this, this[name], prev);
+            }
+        }
+    }
+}
+Object.assign(Lifecycle.prototype, {
+    _events: {},
+    _updates: {},
+    _properties: {},
+});
