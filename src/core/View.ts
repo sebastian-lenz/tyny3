@@ -13,6 +13,7 @@ import {
 } from '../utils/dom/node/createElement';
 
 import type { Behaviour, BehaviourClass, BehaviourOptions } from './Behaviour';
+import { Params } from './Params';
 
 let uid: number = 0;
 
@@ -38,6 +39,7 @@ export interface ViewComponent<TView extends View = View> {
 
 export class View extends Lifecycle {
   readonly el: HTMLElement;
+  readonly params: Params;
   readonly uid: number;
 
   private readonly _behaviours: Array<Behaviour> = [];
@@ -57,6 +59,7 @@ export class View extends Lifecycle {
 
     this.el = el;
     this.uid = uid++;
+    this.params = new Params(this, options);
 
     clearViewCache();
     if (within(el, document)) {

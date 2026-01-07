@@ -74,11 +74,12 @@ declare namespace tyny {
   type ViewApiMap = Map<ViewApi>;
 }
 
-declare namespace process {
-  namespace env {
-    const NODE_ENV: string;
-    const TYNY_PREFIX: string;
-  }
+interface ImportMetaEnv {
+  readonly VITE_TYNY_PREFIX: string;
+}
+
+interface ImportMeta {
+  readonly env: ImportMetaEnv;
 }
 
 interface Element {

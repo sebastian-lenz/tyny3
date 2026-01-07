@@ -18,6 +18,7 @@ export interface RegisterViewOptions {
 
 const activeScrollEventOrigins: Array<any> = [];
 const components: tyny.Map<ViewComponent> = {};
+let classNamePrefix: string = 'tyny';
 let hasActiveScrollEvent: boolean | null = null;
 let isInitialized = false;
 let unbindScrollEvent: Function | null = null;
@@ -300,6 +301,10 @@ export function getChildViews(
   return views;
 }
 
+export function getClassNamePrefix() {
+  return classNamePrefix;
+}
+
 export function getParentView<TView extends View = View>(
   element: any,
   ctor: ViewClass<TView> | string
@@ -329,7 +334,7 @@ export function getView<TView extends View = View>(
 }
 
 export function getViewClassName(name: string): string {
-  return process.env.TYNY_PREFIX + ucFirst(name);
+  return classNamePrefix + ucFirst(name);
 }
 
 export function getViews(element: any): tyny.ViewMap {
@@ -383,8 +388,12 @@ export function registerView(
 
 export function registerViews(
   ctors: tyny.Map<ViewClass>,
-  options: RegisterViewOptions = {}
+  options: RegisterViewOptions & { classNamePrefix?: string } = {}
 ) {
+  if ('classNamePrefix' in options && options.classNamePrefix) {
+    classNamePrefix = options.classNamePrefix;
+  }
+
   for (const name in ctors) {
     registerView(name, ctors[name], options);
   }

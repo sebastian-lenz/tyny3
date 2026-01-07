@@ -9,7 +9,7 @@
     "./core/components/components.js"
   ],
   "scripts": {
-    "build": "npm run clean && tsc",
+    "build": "npm run clean && tsc && etc/publish",
     "clean": "node ./clean.js",
     "watch": "npm run clean && tsc -w"
   },

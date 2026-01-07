@@ -2,5 +2,4 @@
 .DS_Store
 
 /etc
-/lib
 /node_modules

@@ -1,0 +1,159 @@
+import { AutoPlay, AutoPlayOptions } from '../CycleableView/AutoPlay';
+import { BrowseBehaviour, BrowseBehaviourOptions } from './BrowseBehaviour';
+import { ClickBehaviour } from '../../core/pointers/ClickBehaviour';
+import { CycleableView, CycleableViewOptions } from '../CycleableView';
+import { dissolve } from '../../fx/transitions/dissolve';
+import { LoadMode, setChildLoadMode } from '../../core/contracts/loadMode';
+import { Sequencer, SequenceOptions } from './Sequencer';
+import { Transition } from '../../fx/transitions';
+
+import type { Pointer } from '../../core/pointers/Pointer';
+import type {
+  MaybeNativeEvent,
+  NativeEvent,
+} from '../../core/pointers/PointerBehaviour';
+
+export const slideshowDismissEvent = 'tyny:slideshowDismiss';
+export const slideshowEndEvent = 'tyny:slideshowEnd';
+export const slideshowStartEvent = 'tyny:slideshowStart';
+
+export interface SlideshowEventArgs {
+  from: HTMLElement | null;
+  target: Slideshow;
+  to: HTMLElement | null;
+}
+
+export interface SlideshowOptions extends CycleableViewOptions {
+  autoPlay?: AutoPlayOptions;
+  browse?: BrowseBehaviourOptions;
+  transition?: Transition;
+}
+
+export interface SlideshowTransitionOptions {
+  transition?: Transition;
+}
+
+export class Slideshow extends CycleableView<SlideshowTransitionOptions> {
+  public autoPlay: AutoPlay;
+  public browseBehaviour: BrowseBehaviour;
+  public defaultTransition: Transition;
+  public isBrowsing: boolean = false;
+  protected wasAutoPlaying: boolean = false;
+  protected sequencer!: Sequencer<SequenceOptions>;
+
+  constructor(options: SlideshowOptions) {
+    super({
+      initialIndex: 0,
+      isLooped: true,
+      ...options,
+    });
+
+    this.autoPlay = this.addBehaviour(AutoPlay, options.autoPlay);
+    this.browseBehaviour = this.addBehaviour(BrowseBehaviour, options.browse);
+    this.addBehaviour(ClickBehaviour);
+    this.defaultTransition = options.transition || dissolve();
+
+    this.sequencer = new Sequencer<SequenceOptions>({
+      callbackContext: this,
+      dismissCallback: this.onTransitionDismiss,
+      endCallback: this.onTransitionEnd,
+      startCallback: this.onTransitionStart,
+    });
+  }
+
+  get inTransition(): boolean {
+    return this.sequencer.inTransition();
+  }
+
+  immediate(value: HTMLElement | null) {
+    this.transist(value, { transition: () => Promise.resolve() });
+  }
+
+  onBrowseBegin(event: NativeEvent, pointer: Pointer): boolean {
+    if (this.inTransition) {
+      return false;
+    }
+
+    if (!this.isBrowsing) {
+      this.isBrowsing = true;
+      this.wasAutoPlaying = this.autoPlay.isStarted;
+      this.autoPlay.pause();
+    }
+
+    return true;
+  }
+
+  onBrowseEnd(event: MaybeNativeEvent, pointer: Pointer): void {
+    this.isBrowsing = false;
+    if (this.wasAutoPlaying) {
+      this.autoPlay.start();
+    }
+  }
+
+  onConnected() {
+    super.onConnected();
+
+    const { current, items } = this;
+    items.forEach((item) => {
+      if (item !== current) setChildLoadMode(item, LoadMode.Explicit);
+    });
+  }
+
+  protected onTransition(
+    from: HTMLElement | null,
+    to: HTMLElement | null,
+    options: SlideshowTransitionOptions = {}
+  ) {
+    const { defaultTransition, sequencer } = this;
+    const transition = from ? defaultTransition : () => Promise.resolve();
+
+    sequencer.transist({
+      transition,
+      from,
+      to,
+      ...options,
+    });
+  }
+
+  protected onTransitionDismiss({ from, to }: SequenceOptions) {
+    this.trigger(slideshowDismissEvent, <SlideshowEventArgs>{
+      from,
+      target: this,
+      to,
+    });
+  }
+
+  protected onTransitionEnd({ from, to }: SequenceOptions) {
+    this.trigger(slideshowEndEvent, <SlideshowEventArgs>{
+      from,
+      target: this,
+      to,
+    });
+
+    const { currentIndex, items } = this;
+    for (let index = 0; index < items.length; index++) {
+      setChildLoadMode(
+        items[index],
+        Math.abs(index - currentIndex) < 2
+          ? LoadMode.Visibility
+          : LoadMode.Explicit
+      );
+    }
+  }
+
+  protected onTransitionStart({ from, to }: SequenceOptions) {
+    if (from) {
+      from.classList.remove('selected');
+    }
+
+    if (to) {
+      to.classList.add('selected');
+    }
+
+    this.trigger(slideshowStartEvent, <SlideshowEventArgs>{
+      from,
+      target: this,
+      to,
+    });
+  }
+}
