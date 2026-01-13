@@ -1,7 +1,9 @@
-import { clamp, isNumber, toNumber } from '../../lang/number';
-import { isString } from '../../lang/string/isString';
-import { toNodes } from '../misc';
 import { childIndex } from './childIndex';
+import { clamp } from '../../lang/number/clamp';
+import { isNumber } from '../../lang/number/isNumber';
+import { isString } from '../../lang/string/isString';
+import { toNodes } from '../misc/toNodes';
+import { toNumber } from '../../lang/number/toNumber';
 
 export function getIndex(
   value: number | string | 'next' | 'previous',

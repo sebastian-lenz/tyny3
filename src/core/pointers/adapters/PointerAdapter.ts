@@ -1,5 +1,5 @@
 import { AbstractAdapter } from './AbstractAdapter';
-import { isUndefined } from '../../../utils/lang/misc';
+import { isUndefined } from '../../../utils/lang/misc/isUndefined';
 import { PointerType } from '../Pointer';
 
 let isSupported: boolean | undefined = undefined;

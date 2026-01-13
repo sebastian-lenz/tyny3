@@ -1,7 +1,7 @@
-import { boolify } from '../../utils/lang/string';
-import { data } from '../../utils/dom/attr';
+import { boolify } from '../../utils/lang/string/boolify';
+import { data } from '../../utils/dom/attr/data';
 import { event, View } from '../../core';
-import { toBoolean } from '../../utils/lang/misc';
+import { toBoolean } from '../../utils/lang/misc/toBoolean';
 import { transistHeight } from '../../fx/transistHeight';
 import type { ViewOptions } from '../../core';
 

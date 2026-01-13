@@ -1,4 +1,5 @@
-import { toElement, toElements } from '../misc';
+import { toElement } from '../misc/toElement';
+import { toElements } from '../misc/toElements';
 import { isFunction } from '../../lang/function/isFunction';
 import { isString } from '../../lang/string/isString';
 import { isUndefined } from '../../lang/misc/isUndefined';

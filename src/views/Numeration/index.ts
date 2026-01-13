@@ -1,8 +1,8 @@
 import { collectionChangedEvent } from '../CollectionView';
 import { CycleableView, transistEvent } from '../CycleableView';
 import { property } from '../../core';
-import { isString } from '../../utils/lang/string';
-import { on } from '../../utils/dom/event';
+import { isString } from '../../utils/lang/string/isString';
+import { on } from '../../utils/dom/event/on';
 import {
   AbstractNumeration,
   AbstractNumerationOptions,

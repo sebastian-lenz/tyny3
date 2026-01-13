@@ -1,8 +1,8 @@
 import { fastDom, FastDomTask } from './components';
-import { find } from '../utils/dom/node';
-import { isEqual } from '../utils/lang/object/isEqual';
+import { find } from '../utils/dom/node/find';
+import { isObjectEqual } from '../utils/lang/object/isObjectEqual';
 import { isFunction } from '../utils/lang/function/isFunction';
-import { isString } from '../utils/lang/string';
+import { isString } from '../utils/lang/string/isString';
 import { on } from '../utils/dom/event/on';
 
 import type {
@@ -221,7 +221,7 @@ export abstract class Lifecycle {
 
       if (
         (isInitital && immediate) ||
-        (hasPrev && !isEqual(prev, this[name]))
+        (hasPrev && !isObjectEqual(prev, this[name]))
       ) {
         isString(watch)
           ? this[watch](this[name], prev)

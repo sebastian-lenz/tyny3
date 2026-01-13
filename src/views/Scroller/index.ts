@@ -1,5 +1,5 @@
 import { DragDirection } from '../../core/pointers/DragBehaviour';
-import { findAll } from '../../utils/dom/node';
+import { findAll } from '../../utils/dom/node/find';
 import { stop } from '../../fx/dispatcher';
 import { transform } from '../../utils/env/transformProps';
 import { tween, Tween, TweenOptions } from '../../fx/tween';

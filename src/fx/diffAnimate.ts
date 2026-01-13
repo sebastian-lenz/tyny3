@@ -1,6 +1,6 @@
 import { animate, AnimateOptions } from './animate';
 import { diff, DiffCallback, DiffResult, DiffState } from './diff';
-import { noop } from '../utils/lang/function';
+import { noop } from '../utils/lang/function/noop';
 import { transistPositions, Options as PositionOptions } from './diffPositions';
 
 function onlyVisible(items: Array<DiffState>): Array<DiffState> {

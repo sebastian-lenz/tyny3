@@ -1,4 +1,4 @@
-import { toNodes } from '../misc';
+import { toNodes } from '../misc/toNodes';
 
 export function removeNode(element: tyny.ElementLike): void {
   toNodes(element).map(

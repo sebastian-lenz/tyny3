@@ -2,7 +2,8 @@ import { append, before, InsertValue } from './append';
 import { notNullified } from '../../lang/misc/notNullified';
 import { parent } from './parent';
 import { removeNode } from './removeNode';
-import { toNode, toNodes } from '../misc';
+import { toNode } from '../misc/toNode';
+import { toNodes } from '../misc/toNodes';
 
 export function wrapAll(
   element: InsertValue,

@@ -1,5 +1,5 @@
 import { Behaviour, BehaviourOptions } from '../Behaviour';
-import { on } from '../../utils/dom/event';
+import { on } from '../../utils/dom/event/on';
 import type { View } from '../View';
 
 export interface ClickBehaviourOptions extends BehaviourOptions {

@@ -1,6 +1,6 @@
 import { CollectionView, CollectionViewOptions } from '../CollectionView';
 import { isNumber } from '../../utils/lang/number/isNumber';
-import { isUndefined } from '../../utils/lang/misc';
+import { isUndefined } from '../../utils/lang/misc/isUndefined';
 import { property } from '../../core';
 
 export const transistEvent = 'tyny:transist';

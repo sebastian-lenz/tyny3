@@ -1,8 +1,8 @@
 import { AbstractNumeration } from '../Numeration/AbstractNumeration';
-import { clamp } from '../../utils/lang/number';
+import { clamp } from '../../utils/lang/number/clamp';
 import { easeInOutCubic } from '../../fx/easings/easeInOutCubic';
-import { isString } from '../../utils/lang/string';
-import { on } from '../../utils/dom/event';
+import { isString } from '../../utils/lang/string/isString';
+import { on } from '../../utils/dom/event/on';
 import { property, update } from '../../core';
 import { Scroller, ScrollerEventArgs, scrollerScrollEvent } from '../Scroller';
 

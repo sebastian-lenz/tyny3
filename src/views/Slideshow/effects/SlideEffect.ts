@@ -1,4 +1,4 @@
-import { clamp } from '../../../utils/lang/number';
+import { clamp } from '../../../utils/lang/number/clamp';
 import { Effect } from './Effect';
 import { transform } from '../../../utils/env/transformProps';
 

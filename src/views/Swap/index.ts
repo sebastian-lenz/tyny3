@@ -1,5 +1,5 @@
 import { fade } from '../../fx/transitions/fade';
-import { removeNode } from '../../utils/dom/node';
+import { removeNode } from '../../utils/dom/node/removeNode';
 import { Sequencer, SequenceOptions } from '../Slideshow/Sequencer';
 import { Transition } from '../../fx/transitions';
 import { View, ViewOptions } from '../../core/View';

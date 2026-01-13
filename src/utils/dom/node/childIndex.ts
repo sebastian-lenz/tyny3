@@ -1,4 +1,5 @@
-import { toNodes, toNode } from '../misc';
+import { toNode } from '../misc/toNode';
+import { toNodes } from '../misc/toNodes';
 import { parent } from './parent';
 import { children } from './children';
 

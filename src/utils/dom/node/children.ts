@@ -1,5 +1,6 @@
-import { toElement, toElements } from '../misc';
 import { filter } from './filter';
+import { toElement } from '../misc/toElement';
+import { toElements } from '../misc/toElements';
 
 export function children(
   element: tyny.ElementLike,

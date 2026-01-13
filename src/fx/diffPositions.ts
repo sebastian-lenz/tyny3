@@ -1,5 +1,5 @@
 import { diff, DiffCallback, DiffResult } from './diff';
-import { noop } from '../utils/lang/function';
+import { noop } from '../utils/lang/function/noop';
 import { transform } from '../utils/env/transformProps';
 import { transist, TransistOptions } from './transist';
 

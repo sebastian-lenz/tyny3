@@ -1,6 +1,6 @@
-import { isString } from '../../utils/lang/string';
+import { isString } from '../../utils/lang/string/isString';
 import { HoldBehaviour, HoldBehaviourOptions } from './HoldBehaviour';
-import { on } from '../../utils/dom/event';
+import { on } from '../../utils/dom/event/on';
 import { getClassNamePrefix, property, update, View } from '../../core';
 import { Scroller, scrollerScrollEvent } from '../Scroller';
 import { DragDirection, toAxis } from '../../core/pointers/DragBehaviour';

@@ -1,8 +1,8 @@
 import { addFrameHook, removeFrameHook } from '../../fx/dispatcher';
 import { get } from '../../utils/lang/object/get';
 import { NativeEvent } from '../../core/pointers/PointerBehaviour';
+import { parentsAndSelf } from '../../utils/dom/node/parents';
 import { Pointer } from '../../core/pointers/Pointer';
-import { parentsAndSelf } from '../../utils/dom/node';
 import { ScrollerArrows } from './index';
 import { Spring, spring } from '../../fx/spring';
 import { toAxis, toDimension } from '../../core/pointers/DragBehaviour';
