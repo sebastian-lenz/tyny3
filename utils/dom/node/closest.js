@@ -1,8 +1,9 @@
-import { isElement, toElements } from '../misc';
+import { isElement } from '../misc/isElement';
 import { matches } from './matches';
 import { notNullified } from '../../lang/misc/notNullified';
 import { parent } from './parent';
 import { startsWith } from '../../lang/string/startsWith';
+import { toElements } from '../misc/toElements';
 const elProto = typeof Element !== 'undefined' ? Element.prototype : {};
 const closestFn = elProto.closest ||
     function (selector) {

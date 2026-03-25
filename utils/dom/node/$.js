@@ -1,7 +1,8 @@
 import { isString } from '../../lang/string/isString';
-import { toElement, toElements } from '../misc';
 import { fragment } from './fragment';
 import { find, findAll } from './find';
+import { toElement } from '../misc/toElement';
+import { toElements } from '../misc/toElements';
 function isHtml(str) {
     return str[0] === '<' || !!str.match(/^\s*</);
 }

@@ -26,7 +26,9 @@ export class PointerBehaviour extends Behaviour {
         this.pointers = [];
         this.velocity = new Velocity(createVelocity);
         this.adapter = null;
-        this.adapter = createAdapter(options.target || view.el, this);
+        const { target } = options;
+        const el = typeof target == 'string' ? view.find(target) : target;
+        this.adapter = createAdapter(el || view.el, this);
     }
     get center() {
         const { pointers } = this;

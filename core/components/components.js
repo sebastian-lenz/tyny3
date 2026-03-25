@@ -2,15 +2,16 @@ import { apply } from '../../utils/dom/node/apply';
 import { fastDom } from './fastdom';
 import { findAll } from '../../utils/dom/node/find';
 import { isElement } from '../../utils/dom/misc/isElement';
-import { isString } from '../../utils/lang/string';
-import { noop } from '../../utils/lang/function';
+import { isString } from '../../utils/lang/string/isString';
+import { noop } from '../../utils/lang/function/noop';
 import { on } from '../../utils/dom/event/on';
-import { once } from '../../utils/dom/event';
+import { once } from '../../utils/dom/event/once';
 import { parents } from '../../utils/dom/node/parents';
 import { toElement } from '../../utils/dom/misc/toElement';
 import { ucFirst } from '../../utils/lang/string/ucFirst';
 const activeScrollEventOrigins = [];
 const components = {};
+let classNamePrefix = 'tyny';
 let hasActiveScrollEvent = null;
 let isInitialized = false;
 let unbindScrollEvent = null;
@@ -229,6 +230,9 @@ export function getChildViews(parent, includeSelf = false) {
     });
     return views;
 }
+export function getClassNamePrefix() {
+    return classNamePrefix;
+}
 export function getParentView(element, ctor) {
     return (getView(element, ctor) ||
         (element.parentElement ? getParentView(element.parentElement, ctor) : null));
@@ -246,7 +250,7 @@ export function getView(element, ctor) {
     return null;
 }
 export function getViewClassName(name) {
-    return process.env.TYNY_PREFIX + ucFirst(name);
+    return classNamePrefix + ucFirst(name);
 }
 export function getViews(element) {
     return (element && element.__tynyViews) || {};
@@ -283,6 +287,9 @@ export function registerView(name, ctor, { className = getViewClassName(name), u
     }
 }
 export function registerViews(ctors, options = {}) {
+    if ('classNamePrefix' in options && options.classNamePrefix) {
+        classNamePrefix = options.classNamePrefix;
+    }
     for (const name in ctors) {
         registerView(name, ctors[name], options);
     }

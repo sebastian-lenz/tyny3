@@ -1,6 +1,6 @@
 import { animate } from './animate';
 import { diff } from './diff';
-import { noop } from '../utils/lang/function';
+import { noop } from '../utils/lang/function/noop';
 import { transistPositions } from './diffPositions';
 function onlyVisible(items) {
     return items.filter((item) => item.inViewport);

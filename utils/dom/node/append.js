@@ -1,7 +1,7 @@
 import { $ } from './$';
 import { fragment } from './fragment';
 import { isString } from '../../lang/string/isString';
-import { toNodes } from '../misc';
+import { toNodes } from '../misc/toNodes';
 function insertNodes(value, callback) {
     const node = isString(value) ? fragment(value) : value;
     if (!node) {

@@ -1,5 +1,5 @@
 import { diff } from './diff';
-import { noop } from '../utils/lang/function';
+import { noop } from '../utils/lang/function/noop';
 import { transform } from '../utils/env/transformProps';
 import { transist } from './transist';
 export function transistPositions({ changed }, { ignoreX, ignoreY, positionTransition, useTransform3D } = {}) {

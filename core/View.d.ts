@@ -2,6 +2,7 @@ import { Selector } from '../utils/dom/node/find';
 import { Lifecycle } from './Lifecycle';
 import { CreateElementOptions } from '../utils/dom/node/createElement';
 import type { Behaviour, BehaviourClass, BehaviourOptions } from './Behaviour';
+import { Params } from './Params';
 export interface ViewOptions extends Omit<CreateElementOptions, 'extraClassName'> {
     el?: HTMLElement;
     isUpgrade?: boolean;
@@ -19,6 +20,7 @@ export interface ViewComponent<TView extends View = View> {
 }
 export declare class View extends Lifecycle {
     readonly el: HTMLElement;
+    readonly params: Params;
     readonly uid: number;
     private readonly _behaviours;
     private readonly _component;

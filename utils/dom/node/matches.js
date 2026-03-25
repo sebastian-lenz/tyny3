@@ -1,5 +1,5 @@
 import { noop } from '../../lang/function/noop';
-import { toElements } from '../misc';
+import { toElements } from '../misc/toElements';
 const elProto = typeof Element !== 'undefined' ? Element.prototype : {};
 const matchesFn = elProto.matches ||
     elProto.webkitMatchesSelector ||

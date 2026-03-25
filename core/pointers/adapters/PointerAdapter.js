@@ -1,5 +1,5 @@
 import { AbstractAdapter } from './AbstractAdapter';
-import { isUndefined } from '../../../utils/lang/misc';
+import { isUndefined } from '../../../utils/lang/misc/isUndefined';
 let isSupported = undefined;
 const id = (event) => `pointer-${event.pointerId}`;
 export class PointerAdapter extends AbstractAdapter {

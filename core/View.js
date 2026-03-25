@@ -8,6 +8,7 @@ import { removeNode } from '../utils/dom/node/removeNode';
 import { trigger } from '../utils/dom/event/trigger';
 import { within } from '../utils/dom/node/within';
 import { createElement, } from '../utils/dom/node/createElement';
+import { Params } from './Params';
 let uid = 0;
 export class View extends Lifecycle {
     constructor(options = {}) {
@@ -24,6 +25,7 @@ export class View extends Lifecycle {
         }
         this.el = el;
         this.uid = uid++;
+        this.params = new Params(this, options);
         clearViewCache();
         if (within(el, document)) {
             fastDom.read(this._callConnected.bind(this));

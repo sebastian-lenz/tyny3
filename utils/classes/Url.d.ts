@@ -3,18 +3,19 @@ export type ParamValue = string | number | boolean;
 export interface SafeParam {
     __param: ParamValue;
 }
-export interface UrlParts {
+export interface UrlParts<T = Param | null | undefined> {
     fragment?: string;
     path: string;
-    query: tyny.Map<Param | null | undefined>;
+    query: tyny.Map<T>;
 }
 export declare class Url {
     fragment: string;
     path: string;
     query: tyny.Map<Param>;
-    constructor(url: string);
+    constructor(url: string | UrlParts<Param>);
     clearParam(name: string): this;
     clearParams(): this;
+    clone(): Url;
     getParam(name: string, defaultValue: ParamValue): ParamValue;
     getParam(name: string, defaultValue?: ParamValue | null): ParamValue | null;
     getIntParam(name: string, defaultValue: number): number;

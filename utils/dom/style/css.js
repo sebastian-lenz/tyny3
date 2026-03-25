@@ -5,7 +5,7 @@ import { isArray } from '../../lang/array/isArray';
 import { isNumeric } from '../../lang/number/isNumeric';
 import { isString } from '../../lang/string/isString';
 import { isUndefined } from '../../lang/misc/isUndefined';
-import { toElements } from '../misc';
+import { toElements } from '../misc/toElements';
 const cssNumber = {
     'animation-iteration-count': true,
     'column-count': true,

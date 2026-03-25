@@ -1,10 +1,12 @@
 import { closest } from './closest';
 import { matches } from './matches';
-import { isElement, toElement, toElements } from '../misc';
+import { isElement } from '../misc/isElement';
 import { isString } from '../../lang/string/isString';
 import { notNullified } from '../../lang/misc/notNullified';
 import { parent } from './parent';
-import { removeAttr } from '../attr';
+import { removeAttr } from '../attr/removeAttr';
+import { toElement } from '../misc/toElement';
+import { toElements } from '../misc/toElements';
 const contextSelectorRe = /(^|[^\\],)\s*[!>+~-]/;
 const contextSanitizeRe = /([!>+~-])(?=\s+[!>+~-]|\s*$)/g;
 const selectorRe = /.*?[^\\](?:,|$)/g;

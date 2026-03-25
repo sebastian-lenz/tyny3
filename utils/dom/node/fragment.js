@@ -1,4 +1,4 @@
-import { toNodes } from '../misc';
+import { toNodes } from '../misc/toNodes';
 const fragmentRe = /^\s*<(\w+|!)[^>]*>/;
 const singleTagRe = /^<(\w+)\s*\/?>(?:<\/\1>)?$/;
 export function fragment(html) {

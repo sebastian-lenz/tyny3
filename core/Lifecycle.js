@@ -1,9 +1,9 @@
 import { __rest } from "tslib";
 import { fastDom } from './components';
-import { find } from '../utils/dom/node';
-import { isEqual } from '../utils/lang/object/isEqual';
+import { find } from '../utils/dom/node/find';
+import { isObjectEqual } from '../utils/lang/object/isObjectEqual';
 import { isFunction } from '../utils/lang/function/isFunction';
-import { isString } from '../utils/lang/string';
+import { isString } from '../utils/lang/string/isString';
 import { on } from '../utils/dom/event/on';
 export class Lifecycle {
     constructor() {
@@ -150,7 +150,7 @@ export class Lifecycle {
             const prev = values[name];
             delete values[name];
             if ((isInitital && immediate) ||
-                (hasPrev && !isEqual(prev, this[name]))) {
+                (hasPrev && !isObjectEqual(prev, this[name]))) {
                 isString(watch)
                     ? this[watch](this[name], prev)
                     : watch.call(this, this[name], prev);

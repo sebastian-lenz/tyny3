@@ -14,7 +14,7 @@ export interface PointerBehaviourVelocity {
     scale: number;
 }
 export interface PointerBehaviourOptions extends BehaviourOptions {
-    target?: HTMLElement | null;
+    target?: HTMLElement | string | null;
 }
 export declare class PointerBehaviour<TView extends View = View> extends Behaviour<TView> {
     readonly initialCenter: tyny.Point;

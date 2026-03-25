@@ -11,7 +11,14 @@ function isParamValue(value) {
 }
 export class Url {
     constructor(url) {
-        this.parse(url);
+        if (typeof url === 'string') {
+            this.parse(url);
+        }
+        else {
+            this.fragment = url.fragment || '';
+            this.path = url.path;
+            this.query = url.query || {};
+        }
     }
     clearParam(name) {
         delete this.query[name];
@@ -20,6 +27,9 @@ export class Url {
     clearParams() {
         this.query = {};
         return this;
+    }
+    clone() {
+        return new Url(this);
     }
     getParam(name, defaultValue = null) {
         const value = name in this.query ? this.query[name] : defaultValue;

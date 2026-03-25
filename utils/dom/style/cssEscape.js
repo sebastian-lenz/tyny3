@@ -1,4 +1,4 @@
-import { inBrowser } from '../../env';
+import { inBrowser } from '../../env/browser';
 import { isString } from '../../lang/string/isString';
 const escapeFn = (inBrowser && window.CSS && CSS.escape) ||
     function (css) {

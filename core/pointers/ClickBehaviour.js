@@ -1,5 +1,5 @@
 import { Behaviour } from '../Behaviour';
-import { on } from '../../utils/dom/event';
+import { on } from '../../utils/dom/event/on';
 export class ClickBehaviour extends Behaviour {
     constructor(view, options) {
         super(view, options);

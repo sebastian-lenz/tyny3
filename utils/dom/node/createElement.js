@@ -1,5 +1,5 @@
 export function createElement(options) {
-    const { appendTo, attributes, className, extraClassName, prependTo, tagName = 'div', template, } = options;
+    const { appendTo, attributes, children, className, extraClassName, prependTo, tagName = 'div', template, text, } = options;
     const el = document.createElement(tagName);
     if (className) {
         el.className = className;
@@ -18,6 +18,14 @@ export function createElement(options) {
         }
         else {
             el.innerHTML = template;
+        }
+    }
+    else if (text) {
+        el.textContent = text;
+    }
+    else if (children) {
+        for (const child of children) {
+            el.append(child);
         }
     }
     if (appendTo) {
