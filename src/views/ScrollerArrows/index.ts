@@ -7,7 +7,7 @@ import { DragDirection, toAxis } from '../../core/pointers/DragBehaviour';
 import type { ViewOptions } from '../../core';
 
 const buttonParam = (name: string) => ({
-  className: `${getClassNamePrefix()}ScrollerArrows--button ${name}`,
+  className: `${getClassNamePrefix()}ScrollerArrows__button ${name}`,
   defaultValue: `button.${name}`,
   tagName: 'button',
   type: 'element' as 'element',

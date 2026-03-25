@@ -1,5 +1,7 @@
 import { event } from '../../core';
+import { trigger } from '../../utils/dom/event/trigger';
 import { Swap, type SwapOptions } from '../Swap';
+import { tabChanged } from './events';
 
 export interface AriaTabsOptions extends SwapOptions {}
 
@@ -61,11 +63,13 @@ export class AriaTabs extends Swap {
     if (currentTab) {
       currentTab.classList.remove('selected');
       currentTab.setAttribute('aria-selected', 'false');
+      trigger(currentTab, tabChanged, false);
     }
 
     if (value) {
       value.classList.add('selected');
       value.setAttribute('aria-selected', 'true');
+      trigger(value, tabChanged, true);
     }
 
     const controls = value ? value.getAttribute('aria-controls') : null;

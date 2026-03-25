@@ -23,10 +23,10 @@ export interface SafeParam {
   __param: ParamValue;
 }
 
-export interface UrlParts {
+export interface UrlParts<T = Param | null | undefined> {
   fragment?: string;
   path: string;
-  query: tyny.Map<Param | null | undefined>;
+  query: tyny.Map<T>;
 }
 
 export class Url {
@@ -34,8 +34,14 @@ export class Url {
   path!: string;
   query!: tyny.Map<Param>;
 
-  constructor(url: string) {
-    this.parse(url);
+  constructor(url: string | UrlParts<Param>) {
+    if (typeof url === 'string') {
+      this.parse(url);
+    } else {
+      this.fragment = url.fragment || '';
+      this.path = url.path;
+      this.query = url.query || {};
+    }
   }
 
   clearParam(name: string): this {
@@ -46,6 +52,10 @@ export class Url {
   clearParams(): this {
     this.query = {};
     return this;
+  }
+
+  clone() {
+    return new Url(this);
   }
 
   getParam(name: string, defaultValue: ParamValue): ParamValue;

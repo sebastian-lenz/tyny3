@@ -1,22 +1,26 @@
 export interface CreateElementOptions {
   appendTo?: HTMLElement;
   attributes?: { [name: string]: string };
+  children?: Array<string | Node>;
   className?: string;
   extraClassName?: string;
   prependTo?: HTMLElement;
   tagName?: string;
   template?: string | Function;
+  text?: string;
 }
 
 export function createElement(options: CreateElementOptions): HTMLElement {
   const {
     appendTo,
     attributes,
+    children,
     className,
     extraClassName,
     prependTo,
     tagName = 'div',
     template,
+    text,
   } = options;
 
   const el = document.createElement(tagName);
@@ -40,6 +44,12 @@ export function createElement(options: CreateElementOptions): HTMLElement {
       el.innerHTML = template(options);
     } else {
       el.innerHTML = template;
+    }
+  } else if (text) {
+    el.textContent = text;
+  } else if (children) {
+    for (const child of children) {
+      el.append(child);
     }
   }
 

@@ -35,7 +35,7 @@ export class AriaExpander extends View {
     this.setExpanded();
   }
 
-  setExpanded(value: boolean = !this.isExpanded) {
+  setExpanded(value: boolean = !this.isExpanded, animated: boolean = true) {
     if (this.isExpanded === value) return;
     this.isExpanded = value;
 
@@ -49,11 +49,13 @@ export class AriaExpander extends View {
       target.setAttribute('aria-hidden', boolify(!value));
     }
 
-    if (mask) {
+    if (mask && animated) {
       transistHeight(mask, () => {
         mask.classList.add('animated');
         mask.classList.toggle('expanded', value);
       }).then(() => mask.classList.remove('animated'));
+    } else if (mask) {
+      mask.classList.toggle('expanded', value);
     }
   }
 }
