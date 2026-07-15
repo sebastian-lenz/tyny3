@@ -6,7 +6,8 @@ import { getScrollTop } from '../../utils/dom/window/getScrollTop';
 import { modifyState } from './utils/state';
 import { trigger } from '../../utils/dom/event/trigger';
 import { toBasePath } from './utils/path';
-import { Url, type Param } from '../../utils/classes/Url';
+import { Url } from '../../utils/classes/Url';
+import type { Param } from '../../utils/classes/Url';
 import type { ViewOptions } from '../../core';
 
 import {

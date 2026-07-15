@@ -3,26 +3,48 @@ import { trigger } from '../../utils/dom/event/trigger';
 import { Swap, type SwapOptions } from '../Swap';
 import { tabChanged } from './events';
 
-export interface AriaTabsOptions extends SwapOptions {}
+function tabListSelector(this: AriaTabs) {
+  return this.tabListSelector;
+}
+
+function tabSelector(this: AriaTabs) {
+  return this.tabSelector;
+}
+
+export interface AriaTabsOptions extends SwapOptions {
+  tabSelector?: string;
+  tabListSelector?: string;
+}
 
 export class AriaTabs extends Swap {
   currentTab: HTMLElement | null = null;
+  tabSelector: string;
+  tabListSelector: string;
 
   get tabs() {
-    return this.findAll('*[role="tab"]');
+    return this.findAll(this.tabSelector);
   }
 
-  constructor(options: AriaTabsOptions) {
+  constructor({
+    tabSelector = '*[role="tab"]',
+    tabListSelector = '*[role="tablist"]',
+    ...options
+  }: AriaTabsOptions) {
     super(options);
 
-    const tab = this.find('*[role="tab"][aria-selected="true"]');
+    const tab = this.find(`${tabSelector}[aria-selected="true"]`);
     const controls = tab ? tab.getAttribute('aria-controls') : null;
+
     this.currentTab = tab;
     this.content = controls ? document.getElementById(controls) : null;
+    this.tabListSelector = tabListSelector;
+    this.tabSelector = tabSelector;
   }
 
-  @event({ name: 'keydown', selector: '*[role="tablist"]' })
+  @event({ name: 'keydown', selector: tabListSelector })
   onKeyDown(event: KeyboardEvent) {
+    event.stopPropagation();
+
     const { currentTab, tabs } = this;
     const currentIndex = tabs.findIndex((tab) => tab === currentTab);
     let index = currentIndex;
@@ -49,10 +71,15 @@ export class AriaTabs extends Swap {
     }
   }
 
-  @event({ name: 'click', selector: '*[role="tab"]' })
+  @event({ name: 'click', selector: tabSelector })
   onTabClick(event: tyny.DelegateEvent) {
     const { tabs } = this;
-    this.setCurrentTab(tabs.find((tab) => tab === event.current) || null);
+    const tab = tabs.find((tab) => tab === event.current);
+
+    if (tab) {
+      this.setCurrentTab(tab);
+      event.stopPropagation();
+    }
   }
 
   setCurrentTab(value: HTMLElement | null) {

@@ -11,8 +11,10 @@
     "moduleResolution": "bundler",
     "outDir": "../release",
     "removeComments": true,
+    "rootDir": "./src",
+    "skipLibCheck": true,
     "strict": true,
     "target": "es6"
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*"]
 }

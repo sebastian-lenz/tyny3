@@ -1,3 +1,6 @@
+import { signal } from '@preact/signals';
+import type { Signal } from '@preact/signals';
+
 import { CollectionView, CollectionViewOptions } from '../CollectionView';
 import { isNumber } from '../../utils/lang/number/isNumber';
 import { isUndefined } from '../../utils/lang/misc/isUndefined';
@@ -12,13 +15,40 @@ export interface CycleableViewOptions extends CollectionViewOptions {
 
 export class CycleableView<
   TTransitionOptions = any,
-  TItem extends HTMLElement = HTMLElement
+  TItem extends HTMLElement = HTMLElement,
 > extends CollectionView<TItem> {
-  //
+  private _$index: Signal<number> | null = null;
   private _current: TItem | null = null;
+  private _inTransist: boolean = false;
 
   @property({ param: { defaultValue: false, type: 'bool' } })
   isLooped!: boolean;
+
+  get $index(): Signal<number> {
+    let { _$index } = this;
+    if (!_$index) {
+      _$index = this.$index = signal(this.currentIndex);
+    }
+
+    return _$index;
+  }
+
+  set $index(value: Signal<number>) {
+    if (this._$index) throw Error('$index is already set');
+    this._$index = value;
+
+    this.addDestructor(
+      value.subscribe((value) => {
+        if (!this._inTransist) {
+          this.withoutSignal(() => {
+            const normalized = this.normalizeIndex(value);
+            if (normalized !== value) this.$index.value = normalized;
+            this.transist(normalized);
+          });
+        }
+      })
+    );
+  }
 
   get current(): TItem | null {
     return this._current;
@@ -72,11 +102,18 @@ export class CycleableView<
   }
 
   transist(value: TItem | number | null, options?: TTransitionOptions) {
-    const from = this._current;
+    const { _$index, _current: from } = this;
+
     const to = isNumber(value) ? this.at(this.normalizeIndex(value)) : value;
-    if (from === to) return;
+    if (from === to) {
+      return;
+    }
 
     this._current = to;
+
+    if (_$index) {
+      this.withoutSignal(() => (_$index.value = this.currentIndex));
+    }
 
     this.onTransition(from, to, options);
     this.trigger(transistEvent, {
@@ -99,4 +136,11 @@ export class CycleableView<
     to: TItem | null,
     options?: TTransitionOptions
   ) {}
+
+  private withoutSignal(callback: VoidFunction) {
+    if (this._inTransist) return;
+    this._inTransist = true;
+    callback();
+    this._inTransist = false;
+  }
 }
