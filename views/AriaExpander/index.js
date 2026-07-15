@@ -30,6 +30,12 @@ export class AriaExpander extends View {
         }
         if (target) {
             target.setAttribute('aria-hidden', boolify(!value));
+            if (value) {
+                target.removeAttribute('inert');
+            }
+            else {
+                target.setAttribute('inert', 'inert');
+            }
         }
         if (mask && animated) {
             transistHeight(mask, () => {

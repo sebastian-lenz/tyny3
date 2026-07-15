@@ -1,3 +1,4 @@
+import type { Signal } from '@preact/signals';
 import { CollectionView, CollectionViewOptions } from '../CollectionView';
 export declare const transistEvent = "tyny:transist";
 export interface CycleableViewOptions extends CollectionViewOptions {
@@ -5,8 +6,12 @@ export interface CycleableViewOptions extends CollectionViewOptions {
     isLooped?: boolean;
 }
 export declare class CycleableView<TTransitionOptions = any, TItem extends HTMLElement = HTMLElement> extends CollectionView<TItem> {
+    private _$index;
     private _current;
+    private _inTransist;
     isLooped: boolean;
+    get $index(): Signal<number>;
+    set $index(value: Signal<number>);
     get current(): TItem | null;
     set current(value: TItem | null);
     get currentIndex(): number;
@@ -19,4 +24,5 @@ export declare class CycleableView<TTransitionOptions = any, TItem extends HTMLE
     transist(value: TItem | number | null, options?: TTransitionOptions): void;
     onConnected(): void;
     protected onTransition(from: TItem | null, to: TItem | null, options?: TTransitionOptions): void;
+    private withoutSignal;
 }

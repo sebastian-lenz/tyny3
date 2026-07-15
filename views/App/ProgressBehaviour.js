@@ -1,20 +1,25 @@
+import { __decorate } from "tslib";
+import * as events from './events';
 import { Behaviour } from '../../core/Behaviour';
+import { createElement } from '../../utils/dom/node/createElement';
+import { event, getClassNamePrefix } from '../../core';
+function getApp() {
+    return this.view.el;
+}
 export class ProgressBehaviour extends Behaviour {
-    constructor() {
-        super(...arguments);
-        this.element = null;
+    constructor(view, options) {
+        super(view, options);
+        this.current = null;
+        this.createOptions = Object.assign({ appendTo: document.body, className: `${getClassNamePrefix()}App__progress`, tagName: 'div' }, (options.progress || {}));
     }
-    begin() {
-        this.end();
-        const element = document.createElement('div');
-        element.className = 'stApp__progress';
-        this.element = element;
-        document.body.append(element);
+    onBeginLoad() {
+        this.onEndLoad();
+        const element = (this.current = createElement(this.createOptions));
         setTimeout(() => element.classList.add('started'), 0);
     }
-    end() {
-        const { element } = this;
-        this.element = null;
+    onEndLoad() {
+        const { current: element } = this;
+        this.current = null;
         if (element) {
             element.classList.remove('started');
             element.classList.add('finished');
@@ -23,3 +28,9 @@ export class ProgressBehaviour extends Behaviour {
         }
     }
 }
+__decorate([
+    event({ name: events.beginLoadEvent, target: getApp })
+], ProgressBehaviour.prototype, "onBeginLoad", null);
+__decorate([
+    event({ name: events.endLoadEvent, target: getApp })
+], ProgressBehaviour.prototype, "onEndLoad", null);

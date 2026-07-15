@@ -1,21 +1,31 @@
-import { __decorate } from "tslib";
+import { __decorate, __rest } from "tslib";
 import { event } from '../../core';
 import { trigger } from '../../utils/dom/event/trigger';
 import { Swap } from '../Swap';
 import { tabChanged } from './events';
+function tabListSelector() {
+    return this.tabListSelector;
+}
+function tabSelector() {
+    return this.tabSelector;
+}
 export class AriaTabs extends Swap {
     get tabs() {
-        return this.findAll('*[role="tab"]');
+        return this.findAll(this.tabSelector);
     }
-    constructor(options) {
+    constructor(_a) {
+        var { tabSelector = '*[role="tab"]', tabListSelector = '*[role="tablist"]' } = _a, options = __rest(_a, ["tabSelector", "tabListSelector"]);
         super(options);
         this.currentTab = null;
-        const tab = this.find('*[role="tab"][aria-selected="true"]');
+        const tab = this.find(`${tabSelector}[aria-selected="true"]`);
         const controls = tab ? tab.getAttribute('aria-controls') : null;
         this.currentTab = tab;
         this.content = controls ? document.getElementById(controls) : null;
+        this.tabListSelector = tabListSelector;
+        this.tabSelector = tabSelector;
     }
     onKeyDown(event) {
+        event.stopPropagation();
         const { currentTab, tabs } = this;
         const currentIndex = tabs.findIndex((tab) => tab === currentTab);
         let index = currentIndex;
@@ -43,7 +53,11 @@ export class AriaTabs extends Swap {
     }
     onTabClick(event) {
         const { tabs } = this;
-        this.setCurrentTab(tabs.find((tab) => tab === event.current) || null);
+        const tab = tabs.find((tab) => tab === event.current);
+        if (tab) {
+            this.setCurrentTab(tab);
+            event.stopPropagation();
+        }
     }
     setCurrentTab(value) {
         const { currentTab } = this;
@@ -65,8 +79,8 @@ export class AriaTabs extends Swap {
     }
 }
 __decorate([
-    event({ name: 'keydown', selector: '*[role="tablist"]' })
+    event({ name: 'keydown', selector: tabListSelector })
 ], AriaTabs.prototype, "onKeyDown", null);
 __decorate([
-    event({ name: 'click', selector: '*[role="tab"]' })
+    event({ name: 'click', selector: tabSelector })
 ], AriaTabs.prototype, "onTabClick", null);

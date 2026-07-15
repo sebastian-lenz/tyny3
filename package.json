@@ -2,13 +2,115 @@
     "name": "tyny",
     "version": "3.0.0",
     "main": "./index.js",
+    "types": "./index.d.ts",
     "author": "Sebastian Lenz",
     "license": "MIT",
     "type": "module",
+    "exports": {
+        ".": {
+            "types": "./index.d.ts",
+            "import": "./index.js"
+        },
+        "./core/components": {
+            "types": "./core/components/index.d.ts",
+            "import": "./core/components/index.js"
+        },
+        "./core/decorators": {
+            "types": "./core/decorators/index.d.ts",
+            "import": "./core/decorators/index.js"
+        },
+        "./core": {
+            "types": "./core/index.d.ts",
+            "import": "./core/index.js"
+        },
+        "./core/pointers/adapters": {
+            "types": "./core/pointers/adapters/index.d.ts",
+            "import": "./core/pointers/adapters/index.js"
+        },
+        "./fx": {
+            "types": "./fx/index.d.ts",
+            "import": "./fx/index.js"
+        },
+        "./fx/timelines/accessors/converters": {
+            "types": "./fx/timelines/accessors/converters/index.d.ts",
+            "import": "./fx/timelines/accessors/converters/index.js"
+        },
+        "./fx/timelines/accessors": {
+            "types": "./fx/timelines/accessors/index.d.ts",
+            "import": "./fx/timelines/accessors/index.js"
+        },
+        "./fx/timelines/valueTypes": {
+            "types": "./fx/timelines/valueTypes/index.d.ts",
+            "import": "./fx/timelines/valueTypes/index.js"
+        },
+        "./fx/transitions": {
+            "types": "./fx/transitions/index.d.ts",
+            "import": "./fx/transitions/index.js"
+        },
+        "./utils/classes/Breakpoints": {
+            "types": "./utils/classes/Breakpoints/index.d.ts",
+            "import": "./utils/classes/Breakpoints/index.js"
+        },
+        "./views/App": {
+            "types": "./views/App/index.d.ts",
+            "import": "./views/App/index.js"
+        },
+        "./views/AriaComboBox": {
+            "types": "./views/AriaComboBox/index.d.ts",
+            "import": "./views/AriaComboBox/index.js"
+        },
+        "./views/AriaExpander": {
+            "types": "./views/AriaExpander/index.d.ts",
+            "import": "./views/AriaExpander/index.js"
+        },
+        "./views/AriaTabs": {
+            "types": "./views/AriaTabs/index.d.ts",
+            "import": "./views/AriaTabs/index.js"
+        },
+        "./views/CollectionView": {
+            "types": "./views/CollectionView/index.d.ts",
+            "import": "./views/CollectionView/index.js"
+        },
+        "./views/CycleableView": {
+            "types": "./views/CycleableView/index.d.ts",
+            "import": "./views/CycleableView/index.js"
+        },
+        "./views/Numeration": {
+            "types": "./views/Numeration/index.d.ts",
+            "import": "./views/Numeration/index.js"
+        },
+        "./views/Scroller": {
+            "types": "./views/Scroller/index.d.ts",
+            "import": "./views/Scroller/index.js"
+        },
+        "./views/ScrollerArrows": {
+            "types": "./views/ScrollerArrows/index.d.ts",
+            "import": "./views/ScrollerArrows/index.js"
+        },
+        "./views/ScrollerNumeration": {
+            "types": "./views/ScrollerNumeration/index.d.ts",
+            "import": "./views/ScrollerNumeration/index.js"
+        },
+        "./views/Slideshow": {
+            "types": "./views/Slideshow/index.d.ts",
+            "import": "./views/Slideshow/index.js"
+        },
+        "./views/Swap": {
+            "types": "./views/Swap/index.d.ts",
+            "import": "./views/Swap/index.js"
+        },
+        "./*": {
+            "types": "./*.d.ts",
+            "import": "./*.js"
+        }
+    },
     "sideEffects": [
         "./core/components/components.js"
     ],
     "peerDependencies": {
         "tslib": "^2.8.1"
+    },
+    "dependencies": {
+        "@preact/signals": "^2.8.2"
     }
 }

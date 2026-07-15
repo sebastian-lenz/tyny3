@@ -1,5 +1,6 @@
 import { View } from '../../core';
-import { Url, type Param } from '../../utils/classes/Url';
+import { Url } from '../../utils/classes/Url';
+import type { Param } from '../../utils/classes/Url';
 import type { ViewOptions } from '../../core';
 export interface AppOptions extends ViewOptions {
     useCache?: boolean;

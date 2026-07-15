@@ -1,10 +1,33 @@
 import { __decorate } from "tslib";
+import { signal } from '@preact/signals';
 import { CollectionView } from '../CollectionView';
 import { isNumber } from '../../utils/lang/number/isNumber';
 import { isUndefined } from '../../utils/lang/misc/isUndefined';
 import { property } from '../../core';
 export const transistEvent = 'tyny:transist';
 export class CycleableView extends CollectionView {
+    get $index() {
+        let { _$index } = this;
+        if (!_$index) {
+            _$index = this.$index = signal(this.currentIndex);
+        }
+        return _$index;
+    }
+    set $index(value) {
+        if (this._$index)
+            throw Error('$index is already set');
+        this._$index = value;
+        this.addDestructor(value.subscribe((value) => {
+            if (!this._inTransist) {
+                this.withoutSignal(() => {
+                    const normalized = this.normalizeIndex(value);
+                    if (normalized !== value)
+                        this.$index.value = normalized;
+                    this.transist(normalized);
+                });
+            }
+        }));
+    }
     get current() {
         return this._current;
     }
@@ -26,7 +49,9 @@ export class CycleableView extends CollectionView {
     }
     constructor(options = {}) {
         super(options);
+        this._$index = null;
         this._current = null;
+        this._inTransist = false;
     }
     immediate(value) {
         this.transist(value);
@@ -52,11 +77,15 @@ export class CycleableView extends CollectionView {
         return normalized;
     }
     transist(value, options) {
-        const from = this._current;
+        const { _$index, _current: from } = this;
         const to = isNumber(value) ? this.at(this.normalizeIndex(value)) : value;
-        if (from === to)
+        if (from === to) {
             return;
+        }
         this._current = to;
+        if (_$index) {
+            this.withoutSignal(() => (_$index.value = this.currentIndex));
+        }
         this.onTransition(from, to, options);
         this.trigger(transistEvent, {
             from,
@@ -72,6 +101,13 @@ export class CycleableView extends CollectionView {
         }
     }
     onTransition(from, to, options) { }
+    withoutSignal(callback) {
+        if (this._inTransist)
+            return;
+        this._inTransist = true;
+        callback();
+        this._inTransist = false;
+    }
 }
 __decorate([
     property({ param: { defaultValue: false, type: 'bool' } })
